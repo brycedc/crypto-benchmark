@@ -56,7 +56,7 @@ class RSACipher:
 
     def encrypt(self, plaintext):
         try:
-            chunk_size = 214 # Key size minus 42 bytes (when using PKCS1_OAEP)
+            chunk_size = 214  # Key size minus 42 bytes (when using PKCS1_OAEP)
             encrypted_data = b""
             for i in range(0, len(plaintext), chunk_size):
                 decrypted_chunk = plaintext[i : i + chunk_size]
@@ -69,7 +69,7 @@ class RSACipher:
 
     def decrypt(self, cipher_text):
         try:
-            chunk_size = 256 # RSA key size
+            chunk_size = 256  # RSA key size
             decrypted_data = b""
             for i in range(0, len(cipher_text), chunk_size):
                 encrypted_chunk = cipher_text[i : i + chunk_size]
@@ -107,33 +107,32 @@ def main():
 
     if args.cipher == "DES":
         ###############################
-        des_cipher = DESCipher()
-        start_time = time.perf_counter()
-        encrypted_file = des_cipher.encrypt(plaintext)
-        decrypted_file = des_cipher.decrypt(encrypted_file)
-        end_time = time.perf_counter()
-        print(f"DES Cipher: {(end_time - start_time)*1000} ms")
+        cipher = DESCipher()
         ###############################
     elif args.cipher == "AES":
         ###############################
-        aes_cipher = AESCipher()
-        start_time = time.perf_counter()
-        encrypted_file = aes_cipher.encrypt(plaintext)
-        decrypted_file = aes_cipher.decrypt(encrypted_file)
-        end_time = time.perf_counter()
-        print(f"AES Cipher: {(end_time - start_time)*1000} ms")
+        cipher = AESCipher()
         ###############################
     elif args.cipher == "RSA":
-        rsa_cipher = RSACipher()
-        start_time = time.perf_counter()
-        encrypted_file = rsa_cipher.encrypt(plaintext)
-        decrypted_file = rsa_cipher.decrypt(encrypted_file)
-        end_time = time.perf_counter()
-        print(f"RSA Cipher: {(end_time - start_time)*1000} ms")
+        cipher = RSACipher()
         ###############################
     else:
         print(f"The provided cipher {args.cipher} is not valid")
         exit(1)
+
+    # Benchmark
+    start_time_encrypt = time.perf_counter()
+    encrypted_file = cipher.encrypt(plaintext)
+    end_time_encrypt = time.perf_counter()
+    start_time_decrypt = time.perf_counter()
+    decrypted_file = cipher.decrypt(encrypted_file)
+    end_time_decrypt = time.perf_counter()
+    print(
+        f"{args.cipher} Encrypt Time: {(end_time_encrypt - start_time_encrypt)*1000} ms"
+    )
+    print(
+        f"{args.cipher} Decrypt Time: {(end_time_decrypt - start_time_decrypt)*1000} ms"
+    )
 
     # Writes string to decryption file to verify
     if args.output:

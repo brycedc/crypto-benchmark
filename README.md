@@ -4,7 +4,7 @@ This simple program benchmarks the following encryption/decryption ciphers:
 
 - AES
 - DES
-- RSA
+- RSA 
 
 ## CLI Interface
 
